@@ -27,9 +27,9 @@ public class WorkoutTrackerGUI extends JFrame implements ActionListener {
 
             topPanel.add(textField);
             topPanel.add(label);
-            topPanel.add(addButton);
             topPanel.add(textField);
             topPanel.setSize(400, 400);
+            topPanel.add(addButton);
 
             add(topPanel, BorderLayout.NORTH);
             add(scrollPane, BorderLayout.CENTER);
@@ -41,38 +41,38 @@ public class WorkoutTrackerGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JPanel exercisePanel = new JPanel();
         String exercise = textField.getText();
-        System.out.print(exercise);
-        JLabel exerciseName = new JLabel(exercise);
-        JLabel repsText = new JLabel("Reps: ");
-        JLabel setsText = new JLabel("Sets: ");
-        JLabel weightText = new JLabel("Weight: ");
+        if (exercise == "") {
+            System.out.println("Please input an exercise");
+        }
+        else {
+            JLabel exerciseName = new JLabel(exercise);
+            JLabel repsText = new JLabel("Reps: ");
+            JLabel setsText = new JLabel("Sets: ");
+            JLabel weightText = new JLabel("Weight: ");
 
 
+            JTextField reps = new JTextField();
+            reps.setPreferredSize(new Dimension(50, 20));
 
-        JTextField reps = new JTextField();
-        reps.setPreferredSize(new Dimension(50, 20));
+            JTextField sets = new JTextField();
+            sets.setPreferredSize(new Dimension(50, 20));
 
-        JTextField sets = new JTextField();
-        sets.setPreferredSize(new Dimension(50, 20));
-
-        JTextField weight = new JTextField();
-        weight.setPreferredSize(new Dimension(50, 20));
-
+            JTextField weight = new JTextField();
+            weight.setPreferredSize(new Dimension(50, 20));
 
 
-        exercisePanel.add(exerciseName);
-        exercisePanel.add(repsText);
-        exercisePanel.add(reps);
-        exercisePanel.add(setsText);
-        exercisePanel.add(sets);
-        exercisePanel.add(weightText);
-        exercisePanel.add(weight);
-        exercisePanel.setSize(400, 400);
-        exerciseContainer.add(exercisePanel);
-
-
-        revalidate();
-        repaint();
-
+            exercisePanel.add(exerciseName);
+            exercisePanel.add(repsText);
+            exercisePanel.add(reps);
+            exercisePanel.add(setsText);
+            exercisePanel.add(sets);
+            exercisePanel.add(weightText);
+            exercisePanel.add(weight);
+            exercisePanel.setPreferredSize(new Dimension(400, 40));
+            exercisePanel.setMaximumSize(new Dimension(450, 40));
+            exerciseContainer.add(exercisePanel);
+            revalidate();
+            repaint();
+        }
     }
 }
