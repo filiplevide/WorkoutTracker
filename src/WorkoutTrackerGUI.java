@@ -73,8 +73,8 @@ public class WorkoutTrackerGUI extends JFrame implements ActionListener {
         exercisePanel.setMaximumSize(new Dimension(PANEL_WIDTH, 40));
 
         exercisePanel.add(new JLabel(exercise));
-        JTextField reps   = addTextField(exercisePanel, "Reps: ");
-        JTextField sets   = addTextField(exercisePanel, "Sets: ");
+        JTextField reps = addTextField(exercisePanel, "Reps: ");
+        JTextField sets = addTextField(exercisePanel, "Sets: ");
         JTextField weight = addTextField(exercisePanel, "Weight: ");
 
         return exercisePanel;
