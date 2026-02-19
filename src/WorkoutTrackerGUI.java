@@ -6,6 +6,10 @@ import java.awt.event.ActionListener;
 public class WorkoutTrackerGUI extends JFrame implements ActionListener {
         public JTextField textField;
         private JPanel exerciseContainer;
+        private static final int PANEL_HEIGHT = 400;
+        private static final int PANEL_WIDTH = 400;
+        private static final int INPUT_WIDTH = 50;
+        private static final int INPUT_HEIGHT = 20;
 
     public WorkoutTrackerGUI() {
             super("Workout Tracker");
@@ -17,62 +21,62 @@ public class WorkoutTrackerGUI extends JFrame implements ActionListener {
             addGuiComponents();
         }
         private void addGuiComponents() {
-            JPanel topPanel = new JPanel();
-            exerciseContainer = new JPanel();
-            exerciseContainer.setLayout(new BoxLayout(exerciseContainer, BoxLayout.Y_AXIS));
-            JScrollPane scrollPane = new JScrollPane(exerciseContainer);
-            textField = new JTextField(20);
-            JLabel label = new JLabel("Add Exercise");
-            JButton addButton = new JButton("Add");
-
-            topPanel.add(textField);
-            topPanel.add(label);
-            topPanel.add(textField);
-            topPanel.setSize(400, 400);
-            topPanel.add(addButton);
-
-            add(topPanel, BorderLayout.NORTH);
-            add(scrollPane, BorderLayout.CENTER);
-            addButton.addActionListener(this);
-
+            add(createTopPanel(), BorderLayout.NORTH);
+            add(createExerciseContainer(), BorderLayout.CENTER);
     }
+
+    private JScrollPane createExerciseContainer() {
+        exerciseContainer = new JPanel();
+        exerciseContainer.setLayout(new BoxLayout(exerciseContainer, BoxLayout.Y_AXIS));
+        return new JScrollPane(exerciseContainer);
+    }
+    private JPanel createTopPanel() {
+        JPanel topPanel = new JPanel();
+        JLabel label = new JLabel("Add Exercise");
+        textField = new JTextField(20);
+        JButton addButton = new JButton("Add");
+
+        topPanel.add(label);
+        topPanel.add(textField);
+        topPanel.setSize(PANEL_WIDTH, PANEL_HEIGHT);
+        topPanel.add(addButton);
+        addButton.addActionListener(this);
+
+        return topPanel;
+    }
+
+    private JTextField addTextField(JPanel exercisePanel, String labelText) {
+        JTextField field = new JTextField();
+        field.setPreferredSize(new Dimension(INPUT_WIDTH, INPUT_HEIGHT));
+        exercisePanel.add(new JLabel(labelText));
+        exercisePanel.add(field);
+        return field;
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JPanel exercisePanel = new JPanel();
         String exercise = textField.getText();
-        if (exercise == "") {
+        if (exercise.isEmpty()){
             System.out.println("Please input an exercise");
         }
         else {
-            JLabel exerciseName = new JLabel(exercise);
-            JLabel repsText = new JLabel("Reps: ");
-            JLabel setsText = new JLabel("Sets: ");
-            JLabel weightText = new JLabel("Weight: ");
-
-
-            JTextField reps = new JTextField();
-            reps.setPreferredSize(new Dimension(50, 20));
-
-            JTextField sets = new JTextField();
-            sets.setPreferredSize(new Dimension(50, 20));
-
-            JTextField weight = new JTextField();
-            weight.setPreferredSize(new Dimension(50, 20));
-
-
-            exercisePanel.add(exerciseName);
-            exercisePanel.add(repsText);
-            exercisePanel.add(reps);
-            exercisePanel.add(setsText);
-            exercisePanel.add(sets);
-            exercisePanel.add(weightText);
-            exercisePanel.add(weight);
-            exercisePanel.setPreferredSize(new Dimension(400, 40));
-            exercisePanel.setMaximumSize(new Dimension(450, 40));
-            exerciseContainer.add(exercisePanel);
+            exerciseContainer.add(createExercisePanel(exercise));
             revalidate();
             repaint();
         }
+    }
+
+    private JPanel createExercisePanel(String exercise) {
+        JPanel exercisePanel = new JPanel();
+        exercisePanel.setPreferredSize(new Dimension(PANEL_WIDTH, 40));
+        exercisePanel.setMaximumSize(new Dimension(PANEL_WIDTH, 40));
+
+        exercisePanel.add(new JLabel(exercise));
+        JTextField reps   = addTextField(exercisePanel, "Reps: ");
+        JTextField sets   = addTextField(exercisePanel, "Sets: ");
+        JTextField weight = addTextField(exercisePanel, "Weight: ");
+
+        return exercisePanel;
     }
 }
