@@ -10,6 +10,7 @@ public class WorkoutTrackerGUI extends JFrame implements ActionListener {
         private static final int PANEL_WIDTH = 400;
         private static final int INPUT_WIDTH = 50;
         private static final int INPUT_HEIGHT = 20;
+        private static int totalExercies = 0;
 
     public WorkoutTrackerGUI() {
             super("Workout Tracker");
@@ -20,9 +21,11 @@ public class WorkoutTrackerGUI extends JFrame implements ActionListener {
             setResizable(false);
             addGuiComponents();
         }
-        private void addGuiComponents() {
+
+    private void addGuiComponents() {
             add(createTopPanel(), BorderLayout.NORTH);
             add(createExerciseContainer(), BorderLayout.CENTER);
+            add(createCalculationPanel(), BorderLayout.SOUTH);
     }
 
     private JScrollPane createExerciseContainer() {
@@ -62,9 +65,14 @@ public class WorkoutTrackerGUI extends JFrame implements ActionListener {
         }
         else {
             exerciseContainer.add(createExercisePanel(exercise));
+            totalExercies++;
             revalidate();
             repaint();
         }
+    }
+
+    public static int getTotalExercies() {
+        return totalExercies;
     }
 
     private JPanel createExercisePanel(String exercise) {
@@ -78,5 +86,12 @@ public class WorkoutTrackerGUI extends JFrame implements ActionListener {
         JTextField weight = addTextField(exercisePanel, "Weight: ");
 
         return exercisePanel;
+    }
+    private JPanel createCalculationPanel() {
+        JPanel calculationPanel = new JPanel();
+        JButton calculationButton = new JButton("Calculate total weight");
+        calculationPanel.add(calculationButton);
+
+        return calculationPanel;
     }
 }
