@@ -2,15 +2,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class WorkoutTrackerGUI extends JFrame implements ActionListener {
         public JTextField textField;
+        private ArrayList<ArrayList<JTextField>> exerciseList = new ArrayList<>();
         private JPanel exerciseContainer;
         private static final int PANEL_HEIGHT = 400;
         private static final int PANEL_WIDTH = 400;
         private static final int INPUT_WIDTH = 50;
         private static final int INPUT_HEIGHT = 20;
-        private static int totalExercies = 0;
+        private JButton addButton;
+        private JButton calculationButton;
 
     public WorkoutTrackerGUI() {
             super("Workout Tracker");
@@ -37,7 +40,7 @@ public class WorkoutTrackerGUI extends JFrame implements ActionListener {
         JPanel topPanel = new JPanel();
         JLabel label = new JLabel("Add Exercise");
         textField = new JTextField(20);
-        JButton addButton = new JButton("Add");
+        addButton = new JButton("Add");
 
         topPanel.add(label);
         topPanel.add(textField);
@@ -59,21 +62,22 @@ public class WorkoutTrackerGUI extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String exercise = textField.getText();
-        if (exercise.isEmpty()){
-            System.out.println("Please input an exercise");
+
+        if (e.getSource() == addButton) {
+            String exercise = textField.getText();
+            if (exercise.isEmpty()) {
+                System.out.println("Please input an exercise");
+            } else {
+                exerciseContainer.add(createExercisePanel(exercise));
+                revalidate();
+                repaint();
+            }
         }
-        else {
-            exerciseContainer.add(createExercisePanel(exercise));
-            totalExercies++;
-            revalidate();
-            repaint();
+        else if (e.getSource() == calculationButton) {
+            calculateTotalWeight();
         }
     }
 
-    public static int getTotalExercies() {
-        return totalExercies;
-    }
 
     private JPanel createExercisePanel(String exercise) {
         JPanel exercisePanel = new JPanel();
@@ -85,13 +89,38 @@ public class WorkoutTrackerGUI extends JFrame implements ActionListener {
         JTextField sets = addTextField(exercisePanel, "Sets: ");
         JTextField weight = addTextField(exercisePanel, "Weight: ");
 
+        ArrayList<JTextField> addExercise = new ArrayList<>();
+        addExercise.add(reps);
+        addExercise.add(sets);
+        addExercise.add(weight);
+        exerciseList.add(addExercise);
+
+
         return exercisePanel;
     }
     private JPanel createCalculationPanel() {
         JPanel calculationPanel = new JPanel();
-        JButton calculationButton = new JButton("Calculate total weight");
+        calculationButton = new JButton("Calculate total weight");
         calculationPanel.add(calculationButton);
-
+        calculationButton.addActionListener(this);
         return calculationPanel;
+    }
+
+    private void calculateTotalWeight() {
+        double total = 0;
+        for (int i = 0; i < exerciseList.size(); i++) {
+            ArrayList<JTextField> current = exerciseList.get(i);
+            
+            try {
+                double reps = Double.parseDouble(current.get(0).getText());
+                double sets = Double.parseDouble(current.get(1).getText());
+                double weight = Double.parseDouble(current.get(2).getText());
+                total += reps * sets * weight;
+                JOptionPane.showMessageDialog(this,"Total Weight Lifted: " + total + " KG");
+            }
+            catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,"Field cannot be empty");
+            }
+        }
     }
 }
